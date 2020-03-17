@@ -15,6 +15,7 @@ libraryDependencies ++= Seq( jdbc , ehcache , ws , specs2 % Test , guice,
   "org.slf4j" % "slf4j-api" % "1.7.25"
 )
 
+
 unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )  
 
       

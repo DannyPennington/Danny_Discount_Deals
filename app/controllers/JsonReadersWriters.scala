@@ -28,7 +28,7 @@ class JsonReadersWriters @Inject()(
   def create: Action[AnyContent] = Action.async {
     val user = User("Test","User","test@user.com","password",List.empty[Game],List.empty[Game])
     val futureResult = collection.flatMap(_.insert.one(user))
-    futureResult.map(_ => Ok("User added"))
+    futureResult.map(_ => Ok(views.html.index("User added")))
   }
 
 }
