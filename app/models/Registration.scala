@@ -7,7 +7,7 @@ case class Registration(forename:String, surname:String, email: String, password
 
 object Registration {
 
-  val registrationForm:Form[Registration] = Form(
+  val RegistrationForm:Form[Registration] = Form(
     mapping(
       "forename" -> nonEmptyText,
       "surname" -> nonEmptyText,

@@ -3,3 +3,5 @@ GET     /assets/*file                   controllers.Assets.versioned(path="/publ
 GET     /                               controllers.HomeController.index
 
 GET     /testdb                         controllers.JsonReadersWriters.create
+
+POST    /register                       controllers.RegistrationController.registerUser
