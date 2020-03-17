@@ -4,4 +4,4 @@ GET     /                               controllers.HomeController.index
 
 GET     /testdb                         controllers.JsonReadersWriters.create
 
-POST    /register                       controllers.RegistrationController.registerUser
+POST    /register                       controllers.JsonReadersWriters.registerUser

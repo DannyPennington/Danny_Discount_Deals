@@ -1,6 +1,6 @@
 package controllers
 
-import javax.inject.Inject
+import javax.inject._
 import play.api.mvc._
 import reactivemongo.play.json.collection.JSONCollection
 import reactivemongo.play.json._
@@ -17,7 +17,7 @@ class JsonReadersWriters @Inject()(
                                                     components: ControllerComponents,
                                                     val reactiveMongoApi: ReactiveMongoApi
                                                   ) extends AbstractController(components)
-  with MongoController with ReactiveMongoComponents {
+  with MongoController with ReactiveMongoComponents with play.api.i18n.I18nSupport {
 
   implicit def ec: ExecutionContext = components.executionContext
 

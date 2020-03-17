@@ -3,7 +3,7 @@
 @main("Register") {
 
     <div>
-    @helper.form(routes.RegistrationController.loginSubmit()){
+    @helper.form(routes.JsonReadersWriters.registerUser()){
         @helper.inputText(form("forname"), '_label -> "First name:", '_showConstraints -> false)
         @helper.inputText(form("surname"), '_label -> "Last name", '_showConstraints -> false)
         @helper.inputText(form("email"), '_label -> "Email", '_showConstraints -> false)
