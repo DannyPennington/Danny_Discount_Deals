@@ -10,9 +10,3 @@ case class Game(
                description: String,
                release: LocalDate
                )
-
-object JsonFormats {
-  import play.api.libs.json.Json
-
-  implicit val userFormat: OFormat[Game] = Json.format[Game]
-}
