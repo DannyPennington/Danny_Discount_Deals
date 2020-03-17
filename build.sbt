@@ -1,8 +1,8 @@
-name := "Recipies_New_Play_Version"
+name := "Danny's Discount Deals"
  
-version := "1.0" 
+version := "0.1"
       
-lazy val `recipies_new_play_version` = (project in file(".")).enablePlugins(PlayScala)
+lazy val `danny's_discount_deals` = (project in file(".")).enablePlugins(PlayScala)
 
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
       
