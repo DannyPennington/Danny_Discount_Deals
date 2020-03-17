@@ -2,7 +2,7 @@ name := "Danny's Discount Deals"
  
 version := "0.1"
       
-lazy val `danny's_discount_deals` = (project in file(".")).enablePlugins(PlayScala)
+lazy val `dannys_discount_deals` = (project in file(".")).enablePlugins(PlayScala)
 
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"
       
