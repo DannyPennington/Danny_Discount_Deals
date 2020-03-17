@@ -1,3 +1,5 @@
-GET         /assets/*file                controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/*file                   controllers.Assets.versioned(path="/public", file: Asset)
 
-GET        /                             controllers.HomeController.index
+GET     /                               controllers.HomeController.index
+
+GET     /testdb                         controllers.JsonReadersWriters.create
