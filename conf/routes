@@ -8,3 +8,5 @@ GET     /addUser                        controllers.JsonReadersWriters.addUser(f
 
 GET     /register                       controllers.JsonReadersWriters.showRegistration
 POST    /register                       controllers.JsonReadersWriters.registerUser
+
+GET     /findByEmail/:email             controllers.JsonReadersWriters.findByEmail(email: String)
