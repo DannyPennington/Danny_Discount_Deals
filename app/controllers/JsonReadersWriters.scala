@@ -64,7 +64,7 @@ class JsonReadersWriters @Inject()(
     })
   }
 
-  def searchHelper(email: String) = {
+  def searchHelper(email: String): Future[List[User]] = {
     val cursor: Future[Cursor[User]] = collection.map {
       _.find(Json.obj("email" -> email)).
         sort(Json.obj("email" -> -1)).
