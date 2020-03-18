@@ -30,7 +30,7 @@ class JsonReadersWriters @Inject()(
   }
 
   def addUser(newUser: Registration): Action[AnyContent] = Action.async { implicit request:Request[AnyContent] =>
-    val user = User(newUser.forename,newUser.surname,newUser.email,newUser.password,List.empty[Game],List.empty[Game])
+    val user = User(newUser.forename.toString,newUser.surname.toString,newUser.email.toString,newUser.password.toString,List.empty[Game],List.empty[Game])
     val futureResult = collection.flatMap(_.insert.one(user))
     futureResult.map(_ => Ok(views.html.index("Successful registration")))
   }
@@ -45,8 +45,7 @@ class JsonReadersWriters @Inject()(
     }, { user =>
       addUser(user)
       Redirect(routes.HomeController.index()).withSession(request.session + ("user" -> user.email))
-
     })
-
   }
+
 }
