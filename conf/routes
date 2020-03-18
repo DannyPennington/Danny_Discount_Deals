@@ -3,3 +3,10 @@ GET     /assets/*file                   controllers.Assets.versioned(path="/publ
 GET     /                               controllers.HomeController.index
 
 GET     /testdb                         controllers.JsonReadersWriters.create
+
+GET     /addUser                        controllers.JsonReadersWriters.addUser(forename :String, surname :String, email :String, password :String)
+
+GET     /register                       controllers.JsonReadersWriters.showRegistration
+POST    /register                       controllers.JsonReadersWriters.registerUser
+
+GET     /findByEmail/:email             controllers.JsonReadersWriters.findByEmail(email: String)
