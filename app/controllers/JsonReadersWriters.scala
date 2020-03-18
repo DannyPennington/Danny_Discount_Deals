@@ -5,11 +5,13 @@ import play.api.mvc._
 import reactivemongo.play.json.collection.JSONCollection
 import reactivemongo.play.json._
 import collection._
+
 import scala.concurrent.{Await, ExecutionContext, Future}
-import models.{Game, Registration, User}
+import models.{Game, Login, Registration, User}
 import models.JsonFormats._
 import play.api.libs.json._
 import reactivemongo.api.Cursor
+
 import scala.concurrent.duration.Duration
 
 
@@ -90,6 +92,29 @@ class JsonReadersWriters @Inject()(
         true
       }
     }
+  }
+
+  def showLoginForm(): Action[AnyContent] = Action {implicit request:Request[AnyContent] =>
+    if (request.flash.get("invalid").isDefined) {
+      Ok(views.html.login(Login.LoginForm,"Invalid credentials"))
+    }
+    else {
+      Ok(views.html.login(Login.LoginForm,""))
+    }
+  }
+
+  def loginUser(): Action[AnyContent] = Action {implicit request:Request[AnyContent] =>
+    Login.LoginForm.bindFromRequest.fold({ formWithErrors =>
+      BadRequest(views.html.login(formWithErrors,""))
+    }, { login =>
+      val user = Await.result(searchHelper(login.email), Duration.Inf)
+      if (user.head.password == login.password) {
+        Redirect(routes.HomeController.index()).withSession(request.session + ("user" -> login.email))
+      }
+      else {
+        Redirect(routes.JsonReadersWriters.showLoginForm()).flashing("invalid" -> "yes")
+      }
+    })
   }
 
 
