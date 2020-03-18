@@ -24,15 +24,15 @@ class JsonReadersWriters @Inject()(
   def collection: Future[JSONCollection] = database.map(_.collection[JSONCollection]("users"))
 
   def create: Action[AnyContent] = Action.async {
-    val user = User("Test","User","test@user.com","password",List.empty[Game],List.empty[Game])
+    val user = User("Test","User","test@user.com","password",List.empty[Game], List.empty[Game])
     val futureResult = collection.flatMap(_.insert.one(user))
     futureResult.map(_ => Ok(views.html.index("User added")))
   }
 
-  def addUser(newUser: Registration): Action[AnyContent] = Action.async { implicit request:Request[AnyContent] =>
-    val user = User(newUser.forename.toString,newUser.surname.toString,newUser.email.toString,newUser.password.toString,List.empty[Game],List.empty[Game])
+  def addUser(forename :String, surname :String, email :String, password :String): Action[AnyContent] = Action.async { implicit request:Request[AnyContent] =>
+    val user = User(forename, surname, email, password, List.empty[Game], List.empty[Game])
     val futureResult = collection.flatMap(_.insert.one(user))
-    futureResult.map(_ => Ok(views.html.index("Successful registration")))
+    futureResult.map(_ => Ok(views.html.index("User added")).withSession(request.session + ("user" -> user.email)))
   }
 
   def showRegistration: Action[AnyContent] = Action {implicit request:Request[AnyContent] =>
@@ -42,9 +42,9 @@ class JsonReadersWriters @Inject()(
   def registerUser: Action[AnyContent] = Action { implicit request:Request[AnyContent] =>
     Registration.RegistrationForm.bindFromRequest.fold({ formWithErrors =>
       BadRequest(views.html.registration(formWithErrors))
-    }, { user =>
-      addUser(user)
-      Redirect(routes.HomeController.index()).withSession(request.session + ("user" -> user.email))
+    }, { register =>
+      Redirect(routes.JsonReadersWriters.addUser(register.forename, register.surname, register.email, register.password)).flashing("new" -> "yes")
+      //Redirect(routes.HomeController.index()).withSession(request.session + ("user" -> user.email))
     })
   }
 
