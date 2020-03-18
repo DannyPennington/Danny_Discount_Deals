@@ -29,13 +29,23 @@ class JsonReadersWriters @Inject()(
     futureResult.map(_ => Ok(views.html.index("User added")))
   }
 
+  def addUser(newUser: Registration): Action[AnyContent] = Action.async { implicit request:Request[AnyContent] =>
+    val user = User(newUser.forename,newUser.surname,newUser.email,newUser.password,List.empty[Game],List.empty[Game])
+    val futureResult = collection.flatMap(_.insert.one(user))
+    futureResult.map(_ => Ok(views.html.index("Successful registration")))
+  }
+
+  def showRegistration: Action[AnyContent] = Action {implicit request:Request[AnyContent] =>
+    Ok(views.html.registration(Registration.RegistrationForm))
+  }
+
   def registerUser: Action[AnyContent] = Action { implicit request:Request[AnyContent] =>
     Registration.RegistrationForm.bindFromRequest.fold({ formWithErrors =>
       BadRequest(views.html.registration(formWithErrors))
     }, { user =>
-      val newUser = User(user.forename,user.surname,user.email,user.password,List.empty[Game],List.empty[Game])
-      val futureResult = collection.flatMap(_.insert.one(newUser))
-      Redirect("/").withSession("user" -> user.email)
+      addUser(user)
+      Redirect(routes.HomeController.index()).withSession(request.session + ("user" -> user.email))
+
     })
 
   }
