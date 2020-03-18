@@ -1,6 +1,7 @@
-@(form: Form[Registration])(implicit messagesProvider: MessagesProvider)
+@(form: Form[Registration], other: String)(implicit messagesProvider: MessagesProvider)
 
 @main("Register") {
+    @other
     <div>
     @helper.form(routes.JsonReadersWriters.registerUser()){
         @helper.inputText(form("forename"), '_label -> "First name:", '_showConstraints -> false)

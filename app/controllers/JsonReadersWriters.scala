@@ -47,12 +47,17 @@ class JsonReadersWriters @Inject()(
   }
 
   def showRegistration: Action[AnyContent] = Action {implicit request:Request[AnyContent] =>
-    Ok(views.html.registration(Registration.RegistrationForm))
+    if (request.flash.get("new").isDefined) {
+      Ok(views.html.registration(Registration.RegistrationForm, "Email address already registered with account"))
+    }
+    else{
+      Ok(views.html.registration(Registration.RegistrationForm,""))
+    }
   }
 
   def registerUser: Action[AnyContent] = Action { implicit request:Request[AnyContent] =>
     Registration.RegistrationForm.bindFromRequest.fold({ formWithErrors =>
-      BadRequest(views.html.registration(formWithErrors))
+      BadRequest(views.html.registration(formWithErrors,""))
     }, { register =>
       Redirect(routes.JsonReadersWriters.addUser(register.forename, register.surname, register.email, register.password)).flashing("new" -> "yes")
       //Redirect(routes.HomeController.index()).withSession(request.session + ("user" -> user.email))
