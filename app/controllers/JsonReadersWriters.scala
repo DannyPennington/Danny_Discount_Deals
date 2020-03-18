@@ -5,27 +5,21 @@ import play.api.mvc._
 import reactivemongo.play.json.collection.JSONCollection
 import reactivemongo.play.json._
 import collection._
-
 import scala.concurrent.{Await, ExecutionContext, Future}
-import collection._
 import models.{Game, Registration, User}
 import models.JsonFormats._
 import play.api.libs.json._
-import reactivemongo.api.{Cursor, ReadPreference}
-import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMongoComponents}
-
+import reactivemongo.api.Cursor
 import scala.concurrent.duration.Duration
-import scala.util.{Failure, Success}
+
 
 class JsonReadersWriters @Inject()(
                                                     components: ControllerComponents,
-                                                    val reactiveMongoApi: ReactiveMongoApi
-                                                  ) extends AbstractController(components)
-  with MongoController with ReactiveMongoComponents with play.api.i18n.I18nSupport {
+                                                    val mongoService: MongoService
+                                                  ) extends AbstractController(components) with play.api.i18n.I18nSupport {
 
   implicit def ec: ExecutionContext = components.executionContext
-
-  def collection: Future[JSONCollection] = database.map(_.collection[JSONCollection]("users"))
+  val collection: Future[JSONCollection] = mongoService.userCollection
 
   def create: Action[AnyContent] = Action.async {
     val user = User("Test","User","test@user.com","password",List.empty[Game], List.empty[Game])
@@ -36,7 +30,6 @@ class JsonReadersWriters @Inject()(
   def addUser(forename :String, surname :String, email :String, password :String): Action[AnyContent] = Action.async { implicit request:Request[AnyContent] =>
     val user = User(forename, surname, email, password, List.empty[Game], List.empty[Game])
     val exists = Await.result(userExists(email), Duration.Inf)
-
     if (exists) {
      Future(Redirect(routes.JsonReadersWriters.showRegistration()).flashing("new" -> "no"))
     }
