@@ -48,6 +48,26 @@ class JsonReadersWriters @Inject()(
     })
   }
 
+  def findByEmail(email: String): Action[AnyContent] = Action.async {
+    val cursor: Future[Cursor[User]] = collection.map {
+      _.find(Json.obj("email" -> email)).
+        sort(Json.obj("email" -> -1)).
+        cursor[User]()
+    }
+
+    val futureUsersList: Future[List[User]] =
+      cursor.flatMap(
+        _.collect[List](
+          -1,
+          Cursor.FailOnError[List[User]]()
+        )
+      )
+
+    futureUsersList.map { persons =>
+      Ok(persons.toString)
+    }
+  }
+
 
 
 
