@@ -3,15 +3,19 @@ package controllers
 import javax.inject._
 import play.api.mvc._
 import reactivemongo.play.json.collection.JSONCollection
-import reactivemongo.play.json._, collection._
+import reactivemongo.play.json._
+import collection._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{Await, ExecutionContext, Future}
 import collection._
 import models.{Game, Registration, User}
 import models.JsonFormats._
 import play.api.libs.json._
 import reactivemongo.api.{Cursor, ReadPreference}
 import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMongoComponents}
+
+import scala.concurrent.duration.Duration
+import scala.util.{Failure, Success}
 
 class JsonReadersWriters @Inject()(
                                                     components: ControllerComponents,
@@ -31,8 +35,15 @@ class JsonReadersWriters @Inject()(
 
   def addUser(forename :String, surname :String, email :String, password :String): Action[AnyContent] = Action.async { implicit request:Request[AnyContent] =>
     val user = User(forename, surname, email, password, List.empty[Game], List.empty[Game])
-    val futureResult = collection.flatMap(_.insert.one(user))
-    futureResult.map(_ => Redirect("/").withSession(request.session + ("user" -> user.email)))
+    val exists = Await.result(userExists(email), Duration.Inf)
+
+    if (exists) {
+     Future(Redirect(routes.JsonReadersWriters.showRegistration()).flashing("new" -> "no"))
+    }
+    else {
+      val futureResult = collection.flatMap(_.insert.one(user))
+      futureResult.map(_ => Redirect("/").withSession(request.session + ("user" -> user.email)))
+    }
   }
 
   def showRegistration: Action[AnyContent] = Action {implicit request:Request[AnyContent] =>
@@ -68,7 +79,29 @@ class JsonReadersWriters @Inject()(
     }
   }
 
+  def userExists(email: String): Future[Boolean] = {
+    val cursor: Future[Cursor[User]] = collection.map {
+      _.find(Json.obj("email" -> email)).
+        sort(Json.obj("email" -> -1)).
+        cursor[User]()
+    }
 
+    val futureUsersList: Future[List[User]] =
+      cursor.flatMap(
+        _.collect[List](
+          -1,
+          Cursor.FailOnError[List[User]]()
+        )
+      )
+    futureUsersList.map { person =>
+      if (person.isEmpty) {
+        false
+      }
+      else {
+        true
+      }
+    }
+  }
 
 
 }
