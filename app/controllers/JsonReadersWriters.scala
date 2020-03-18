@@ -3,14 +3,14 @@ package controllers
 import javax.inject._
 import play.api.mvc._
 import reactivemongo.play.json.collection.JSONCollection
-import reactivemongo.play.json._
+import reactivemongo.play.json._, collection._
 
 import scala.concurrent.{ExecutionContext, Future}
 import collection._
 import models.{Game, Registration, User}
 import models.JsonFormats._
-import play.api.libs.json.{JsValue, Json}
-import reactivemongo.api.Cursor
+import play.api.libs.json._
+import reactivemongo.api.{Cursor, ReadPreference}
 import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMongoComponents}
 
 class JsonReadersWriters @Inject()(
@@ -32,7 +32,7 @@ class JsonReadersWriters @Inject()(
   def addUser(forename :String, surname :String, email :String, password :String): Action[AnyContent] = Action.async { implicit request:Request[AnyContent] =>
     val user = User(forename, surname, email, password, List.empty[Game], List.empty[Game])
     val futureResult = collection.flatMap(_.insert.one(user))
-    futureResult.map(_ => Ok(views.html.index("User added")).withSession(request.session + ("user" -> user.email)))
+    futureResult.map(_ => Redirect("/").withSession(request.session + ("user" -> user.email)))
   }
 
   def showRegistration: Action[AnyContent] = Action {implicit request:Request[AnyContent] =>
@@ -47,5 +47,8 @@ class JsonReadersWriters @Inject()(
       //Redirect(routes.HomeController.index()).withSession(request.session + ("user" -> user.email))
     })
   }
+
+
+
 
 }
