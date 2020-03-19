@@ -48,6 +48,9 @@ class JsonReadersWriters @Inject()(
     else if (request.flash.get("exists").isDefined) {
       Ok(views.html.registration(Registration.RegistrationForm, "Please create an account!"))
     }
+    else if (request.flash.get("home").isDefined) {
+      Ok(views.html.registration(Registration.RegistrationForm, "Please log in to see your homepage!"))
+    }
     else{
       Ok(views.html.registration(Registration.RegistrationForm,""))
     }

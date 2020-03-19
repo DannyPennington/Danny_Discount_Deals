@@ -2,6 +2,8 @@ GET     /assets/*file                   controllers.Assets.versioned(path="/publ
 
 GET     /                               controllers.HomeController.index
 
+GET     /home                           controllers.HomeController.home
+
 GET     /testdb                         controllers.JsonReadersWriters.create
 
 GET     /addUser                        controllers.JsonReadersWriters.addUser(forename :String, surname :String, email :String, password :String)
