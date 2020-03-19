@@ -15,4 +15,13 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
     }
   }
 
+  def home: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    if (request.session.get("user").isDefined) {
+      Ok(views.html.home("Home"))
+    }
+    else {
+      Redirect(routes.JsonReadersWriters.showLoginForm()).flashing("home" -> "no")
+    }
+  }
+
 }
