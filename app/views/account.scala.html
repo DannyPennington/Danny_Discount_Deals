@@ -6,12 +6,12 @@
     <br>
     Name: @details.forename @details.surname <br>
     Account email: @details.email <br>
-    <a href="/account/updatepassword">Change password</a> <br> <br>
+    <a href="/account/updatepassword" class="button button3">Change password</a> <br> <br>
     Order history:
     @for(order <- details.orders) {
         @order
         <br>
     }
     <br>
-    <a href="/account/delete">Delete account</a>
+    <a href="/account/delete" class="button">Delete account</a>
 }
