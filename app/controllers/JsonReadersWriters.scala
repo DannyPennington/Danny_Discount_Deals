@@ -29,7 +29,7 @@ class JsonReadersWriters @Inject()(
     }
     else {
       val futureResult = collection.flatMap(_.insert.one(user))
-      futureResult.map(_ => Redirect("/").withSession(request.session + ("user" -> user.email)))
+      futureResult.map(_ => Redirect(routes.HomeController.home()).withSession(request.session + ("user" -> user.email)))
     }
   }
 
