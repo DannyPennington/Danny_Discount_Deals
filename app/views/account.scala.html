@@ -1,7 +1,7 @@
-@(details:User)
+@(details:User,other: String)
 
 @mainloggedin("User account") {
-
+    @other <br> <br>
     Name: @details.forename @details.surname <br>
     Account email: @details.email <br>
     Order history:
