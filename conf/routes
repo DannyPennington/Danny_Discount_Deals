@@ -4,14 +4,14 @@ GET     /                               controllers.HomeController.index
 
 GET     /home                           controllers.HomeController.home
 
-GET     /testdb                         controllers.JsonReadersWriters.create
-
 GET     /addUser                        controllers.JsonReadersWriters.addUser(forename :String, surname :String, email :String, password :String)
 
 GET     /register                       controllers.JsonReadersWriters.showRegistration
 POST    /register                       controllers.JsonReadersWriters.registerUser
 
-GET     /login                          controllers.JsonReadersWriters.showLoginForm
-POST    /login                          controllers.JsonReadersWriters.loginUser
+GET     /login                          controllers.LoginController.showLoginForm
+POST    /login                          controllers.LoginController.loginUser
+
+GET     /logout                         controllers.LoginController.logoutUser()
 
 GET     /findByEmail/:email             controllers.JsonReadersWriters.findByEmail(email: String)

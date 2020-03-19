@@ -23,12 +23,6 @@ class JsonReadersWriters @Inject()(
   implicit def ec: ExecutionContext = components.executionContext
   val collection: Future[JSONCollection] = mongoService.userCollection
 
-  def create: Action[AnyContent] = Action.async {
-    val user = User("Test","User","test@user.com","password",List.empty[Game], List.empty[Game])
-    val futureResult = collection.flatMap(_.insert.one(user))
-    futureResult.map(_ => Ok(views.html.index("User added")))
-  }
-
   def addUser(forename :String, surname :String, email :String, password :String): Action[AnyContent] = Action.async { implicit request:Request[AnyContent] =>
     val user = User(forename, surname, email, password, List.empty[Game], List.empty[Game])
     val exists = Await.result(userExists(email), Duration.Inf)
@@ -99,32 +93,5 @@ class JsonReadersWriters @Inject()(
       }
     }
   }
-
-  def showLoginForm(): Action[AnyContent] = Action {implicit request:Request[AnyContent] =>
-    if (request.flash.get("invalid").isDefined) {
-      Ok(views.html.login(Login.LoginForm,"Invalid credentials"))
-    }
-    else {
-      Ok(views.html.login(Login.LoginForm,""))
-    }
-  }
-
-  def loginUser(): Action[AnyContent] = Action {implicit request:Request[AnyContent] =>
-    Login.LoginForm.bindFromRequest.fold({ formWithErrors =>
-      BadRequest(views.html.login(formWithErrors,""))
-    }, { login =>
-      val user = Await.result(searchHelper(login.email), Duration.Inf)
-      if (user.isEmpty) {
-        Redirect(routes.JsonReadersWriters.showRegistration()).flashing("exists" -> "no")
-      }
-      else if (user.head.password == login.password) {
-        Redirect(routes.HomeController.index()).withSession(request.session + ("user" -> login.email))
-      }
-      else {
-        Redirect(routes.JsonReadersWriters.showLoginForm()).flashing("invalid" -> "yes")
-      }
-    })
-  }
-
 
 }
