@@ -21,3 +21,6 @@ GET     /account                        controllers.AccountController.showDetail
 GET     /account/updatepassword         controllers.AccountController.showPassword
 POST    /account/updatepassword         controllers.AccountController.updatePassword
 GET     /pwd                            controllers.AccountController.setPassword(n_password:String)
+
+GET     /account/delete                 controllers.AccountController.confirmDelete
+GET     /account/confirmdelete          controllers.AccountController.deleteUser()
