@@ -1,7 +1,7 @@
 @(form:Form[Login], other: String)(implicit messagesProvider: MessagesProvider)
 
 @main("Please log in") {
-
+    @other
     @helper.form(routes.LoginController.loginUser()) {
     @helper.inputText(form("email"), '_label -> "Email: ", '_show_constraints -> false )
     @helper.inputPassword(form("password"), '_label -> "Password: ", '_show_constraints -> false )
