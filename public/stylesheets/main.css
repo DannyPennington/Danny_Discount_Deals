@@ -71,3 +71,11 @@ body {
     border: none;
     cursor: pointer;
 }
+header a, header input[type=text], header .search-container button {
+    float: right;
+    display: inline-block;
+    text-align: right;
+    width: 25%;
+    margin: 0;
+    padding: 14px;
+}
