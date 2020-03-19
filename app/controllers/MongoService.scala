@@ -13,6 +13,15 @@ import reactivemongo.api.Cursor
 import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMongoComponents}
 import reactivemongo.api.commands.WriteResult
 import scala.concurrent.ExecutionContext.Implicits.global
+import reactivemongo.play.json.collection.JSONCollection
+import reactivemongo.play.json._
+import collection._
+import scala.concurrent.{Await, ExecutionContext, Future}
+import models.{Game, Login, Registration, User}
+import models.JsonFormats._
+import reactivemongo.api.Cursor
+
+
 
 class MongoService @Inject()(
                               val reactiveMongoApi: ReactiveMongoApi
@@ -21,6 +30,23 @@ class MongoService @Inject()(
 
   def userCollection: Future[JSONCollection] = reactiveMongoApi.database.map(_.collection[JSONCollection]("users"))
   def gameCollection: Future[JSONCollection] = reactiveMongoApi.database.map(_.collection[JSONCollection]("games"))
+
+
+  def searchHelper(email: String): Future[List[User]] = {
+    val cursor: Future[Cursor[User]] = userCollection.map {
+      _.find(Json.obj("email" -> email)).
+        sort(Json.obj("email" -> -1)).
+        cursor[User]()
+    }
+    val futureUsersList: Future[List[User]] =
+      cursor.flatMap(
+        _.collect[List](
+          -1,
+          Cursor.FailOnError[List[User]]()
+        )
+      )
+    futureUsersList
+  }
 
   def findAllUsers(): Future[List[User]] = {
     userCollection.map {

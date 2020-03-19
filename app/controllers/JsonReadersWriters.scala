@@ -5,13 +5,11 @@ import play.api.mvc._
 import reactivemongo.play.json.collection.JSONCollection
 import reactivemongo.play.json._
 import collection._
-
 import scala.concurrent.{Await, ExecutionContext, Future}
 import models.{Game, Login, Registration, User}
 import models.JsonFormats._
 import play.api.libs.json._
 import reactivemongo.api.Cursor
-
 import scala.concurrent.duration.Duration
 
 
@@ -59,31 +57,15 @@ class JsonReadersWriters @Inject()(
     })
   }
 
-  def searchHelper(email: String): Future[List[User]] = {
-    val cursor: Future[Cursor[User]] = collection.map {
-      _.find(Json.obj("email" -> email)).
-        sort(Json.obj("email" -> -1)).
-        cursor[User]()
-    }
-    val futureUsersList: Future[List[User]] =
-      cursor.flatMap(
-        _.collect[List](
-          -1,
-          Cursor.FailOnError[List[User]]()
-        )
-      )
-    futureUsersList
-  }
-
   def findByEmail(email: String): Action[AnyContent] = Action.async {
-    val futureUsersList = searchHelper(email)
+    val futureUsersList = mongoService.searchHelper(email)
     futureUsersList.map { persons =>
       Ok(persons.toString)
     }
   }
 
   def userExists(email: String): Future[Boolean] = {
-    val futureUsersList = searchHelper(email)
+    val futureUsersList = mongoService.searchHelper(email)
     futureUsersList.map { person =>
       if (person.isEmpty) {
         false

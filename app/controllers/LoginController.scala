@@ -22,22 +22,6 @@ class LoginController @Inject()(
   implicit def ec: ExecutionContext = components.executionContext
   val collection: Future[JSONCollection] = mongoService.userCollection
 
-  def searchHelper(email: String): Future[List[User]] = {
-    val cursor: Future[Cursor[User]] = collection.map {
-      _.find(Json.obj("email" -> email)).
-        sort(Json.obj("email" -> -1)).
-        cursor[User]()
-    }
-    val futureUsersList: Future[List[User]] =
-      cursor.flatMap(
-        _.collect[List](
-          -1,
-          Cursor.FailOnError[List[User]]()
-        )
-      )
-    futureUsersList
-  }
-
   def showLoginForm(): Action[AnyContent] = Action {implicit request:Request[AnyContent] =>
     if (request.flash.get("invalid").isDefined) {
       Ok(views.html.login(Login.LoginForm,"Invalid credentials"))
@@ -51,7 +35,7 @@ class LoginController @Inject()(
     Login.LoginForm.bindFromRequest.fold({ formWithErrors =>
       BadRequest(views.html.login(formWithErrors,""))
     }, { login =>
-      val user = Await.result(searchHelper(login.email), Duration.Inf)
+      val user = Await.result(mongoService.searchHelper(login.email), Duration.Inf)
       if (user.isEmpty) {
         Redirect(routes.JsonReadersWriters.showRegistration()).flashing("exists" -> "no")
       }
