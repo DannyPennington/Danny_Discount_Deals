@@ -15,3 +15,5 @@ POST    /login                          controllers.LoginController.loginUser
 GET     /logout                         controllers.LoginController.logoutUser()
 
 GET     /findByEmail/:email             controllers.JsonReadersWriters.findByEmail(email: String)
+
+GET     /account                        controllers.AccountController.showDetails
