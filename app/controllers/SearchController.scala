@@ -22,7 +22,7 @@ class SearchController @Inject()(
 
   val collection: Future[JSONCollection] = mongoService.gameCollection
 
-  def gameSearchHelper(name: String): Future[List[Game]] = {
+  def searchByName(name: String): Future[List[Game]] = {
     val cursor: Future[Cursor[Game]] = collection.map {
       _.find(Json.obj("name" -> name)).
         sort(Json.obj("name" -> -1)).
