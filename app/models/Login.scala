@@ -1,4 +1,5 @@
 package models
+
 import play.api.data.Form
 import play.api.data.Forms._
 
