@@ -43,7 +43,10 @@ class JsonReadersWriters @Inject()(
 
   def showRegistration: Action[AnyContent] = Action {implicit request:Request[AnyContent] =>
     if (request.flash.get("new").isDefined) {
-      Ok(views.html.registration(Registration.RegistrationForm, "Email address already registered with account"))
+      Ok(views.html.registration(Registration.RegistrationForm, "Email address already registered with account!"))
+    }
+    else if (request.flash.get("exists").isDefined) {
+      Ok(views.html.registration(Registration.RegistrationForm, "Please create an account!"))
     }
     else{
       Ok(views.html.registration(Registration.RegistrationForm,""))
@@ -108,7 +111,10 @@ class JsonReadersWriters @Inject()(
       BadRequest(views.html.login(formWithErrors,""))
     }, { login =>
       val user = Await.result(searchHelper(login.email), Duration.Inf)
-      if (user.head.password == login.password) {
+      if (user.isEmpty) {
+        Redirect(routes.JsonReadersWriters.showRegistration()).flashing("exists" -> "no")
+      }
+      else if (user.head.password == login.password) {
         Redirect(routes.HomeController.index()).withSession(request.session + ("user" -> login.email))
       }
       else {
