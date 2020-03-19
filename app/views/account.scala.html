@@ -1,9 +1,12 @@
 @(details:User,other: String)
 
 @mainloggedin("User account") {
-    @other <br> <br>
+    @other <br>
+
+    <br>
     Name: @details.forename @details.surname <br>
     Account email: @details.email <br>
+    <a href="/account/updatepassword">Change password</a> <br> <br>
     Order history:
     @for(order <- details.orders) {
         @order
