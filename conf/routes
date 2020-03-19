@@ -17,3 +17,7 @@ GET     /logout                         controllers.LoginController.logoutUser()
 GET     /findByEmail/:email             controllers.JsonReadersWriters.findByEmail(email: String)
 
 GET     /account                        controllers.AccountController.showDetails
+
+GET     /account/updatepassword         controllers.AccountController.showPassword
+POST    /account/updatepassword         controllers.AccountController.updatePassword
+GET     /pwd                            controllers.AccountController.setPassword(n_password:String)
