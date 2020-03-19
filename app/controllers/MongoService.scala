@@ -1,26 +1,16 @@
 package controllers
 
 import javax.inject.Inject
-import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
-import reactivemongo.play.json.collection.JSONCollection
-import scala.concurrent.{ExecutionContext, Future}
-import reactivemongo.play.json._
-import collection._
-import models.{Game, User}
-import models.JsonFormats._
-import play.api.libs.json.{JsValue, Json}
-import reactivemongo.api.Cursor
-import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMongoComponents}
-import reactivemongo.api.commands.WriteResult
+import play.api.libs.json.{Json}
+import play.modules.reactivemongo.{ReactiveMongoApi, ReactiveMongoComponents}
 import scala.concurrent.ExecutionContext.Implicits.global
 import reactivemongo.play.json.collection.JSONCollection
 import reactivemongo.play.json._
 import collection._
-import scala.concurrent.{Await, ExecutionContext, Future}
-import models.{Game, Login, Registration, User}
+import scala.concurrent.Future
+import models.{Game, User}
 import models.JsonFormats._
 import reactivemongo.api.Cursor
-
 
 
 class MongoService @Inject()(
