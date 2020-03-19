@@ -1,0 +1,12 @@
+@(details:User)
+
+@mainloggedin("User account") {
+
+    Name: @details.forename @details.surname <br>
+    Account email: @details.email <br>
+    Order history:
+    @for(order <- details.orders) {
+        @order
+        <br>
+    }
+}
