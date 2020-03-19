@@ -2,9 +2,9 @@ ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    width: 500px;
     overflow: hidden;
     background-color: #99ccff;
+    width: 450px;
     font-family: verdana, serif;
 }
 li {
@@ -31,4 +31,10 @@ li a:hover {
     background-color: white;
     color: black;
     text-align: left;
+}
+
+body {
+    height: 125vh;
+    background-image: url("../../public/images/pika.jpg");
+    background-size: cover;
 }
