@@ -1,15 +1,16 @@
 package controllers
+
 import javax.inject._
 import play.api.mvc._
 import reactivemongo.play.json.collection.JSONCollection
-import reactivemongo.play.json._
 import collection._
 import scala.concurrent.{Await, ExecutionContext, Future}
-import models.{Game, Login, Registration, User, Search}
+import models.{Game, Login, Registration, Search, User}
 import models.JsonFormats._
 import play.api.libs.json._
-import reactivemongo.api.Cursor
 import java.time.LocalDate
+import reactivemongo.api.Cursor
+import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.duration.Duration
 
 
@@ -22,23 +23,19 @@ class SearchController @Inject()(
 
   val collection: Future[JSONCollection] = mongoService.gameCollection
 
-  def searchByName(name: String): Future[List[Game]] = {
-    val cursor: Future[Cursor[Game]] = collection.map {
-      _.find(Json.obj("name" -> name)).
-        sort(Json.obj("name" -> -1)).
-        cursor[Game]()
+
+  def searchByName(search: String): List[Game] = {
+    val finalGames = ArrayBuffer.empty[Game]
+    val games = Await.result(mongoService.findAllGames(),Duration.Inf)
+    for (game <- games) {
+      if (game.name.contains(search)) {
+        finalGames += game
+      }
     }
-    val futureGameList: Future[List[Game]] =
-      cursor.flatMap(
-        _.collect[List](
-          -1,
-          Cursor.FailOnError[List[Game]]()
-        )
-      )
-    futureGameList
+    finalGames.toList
   }
   def search(name:String): Action[AnyContent] = Action {implicit request:Request[AnyContent] =>
-    Ok(views.html.searchresults(Await.result(searchByName(name), Duration.Inf)))
+    Ok(views.html.searchresults(searchByName(name)))
   }
 
   def create: Action[AnyContent] = Action.async {
