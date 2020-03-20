@@ -43,7 +43,7 @@ class SearchController @Inject()(
   }
 
   def create: Action[AnyContent] = Action.async {
-    val game = Game("Halo",20,"15",List("Action","FPS"),"A shooty game",LocalDate.of(2004,5,5))
+    val game = Game("Halo 2",20,"15",List("Action","FPS"),"Another shooty game",LocalDate.of(2004,5,5))
     val futureResult = collection.flatMap(_.insert.one(game))
     futureResult.map(_ => Ok(views.html.index("Game added")))
   }
