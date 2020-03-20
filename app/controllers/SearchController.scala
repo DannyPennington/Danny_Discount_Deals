@@ -38,6 +38,10 @@ class SearchController @Inject()(
     futureGameList
   }
 
+  def search(name:String): Action[AnyContent] = Action {implicit request:Request[AnyContent] =>
+    Ok(views.html.searchresults(Await.result(searchByName(name), Duration.Inf)))
+  }
+
   def create: Action[AnyContent] = Action.async {
     val game = Game("Halo",20,"15",List("Action","FPS"),"A shooty game",LocalDate.of(2004,5,5))
     val futureResult = collection.flatMap(_.insert.one(game))

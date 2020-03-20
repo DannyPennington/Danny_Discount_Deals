@@ -61,21 +61,4 @@ body {
 .button2 {background-color: #4CAF50}
 .button3 {background-color: darkviolet}
 
-.search-container button {
-    float: right;
-    padding: 6px 10px;
-    margin-top: 8px;
-    margin-right: 16px;
-    background: #ddd;
-    font-size: 17px;
-    border: none;
-    cursor: pointer;
-}
-header a, header input[type=text], header .search-container button {
-    float: right;
-    display: inline-block;
-    text-align: right;
-    width: 25%;
-    margin: 0;
-    padding: 14px;
-}
+
