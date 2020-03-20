@@ -24,4 +24,13 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
     }
   }
 
+  def about(): Action[AnyContent] = Action { implicit request:Request[AnyContent] =>
+    if (request.session.get("user").isDefined) {
+      Ok(views.html.aboutLoggedIn())
+    }
+    else {
+      Ok(views.html.about())
+    }
+  }
+
 }
