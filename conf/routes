@@ -26,3 +26,5 @@ GET     /account/delete                 controllers.AccountController.confirmDel
 GET     /account/confirmdelete          controllers.AccountController.deleteUser()
 
 GET     /addgame                        controllers.SearchController.create
+
+GET     /search/:name                  controllers.SearchController.search(name:String)
