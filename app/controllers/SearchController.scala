@@ -5,7 +5,7 @@ import reactivemongo.play.json.collection.JSONCollection
 import reactivemongo.play.json._
 import collection._
 import scala.concurrent.{Await, ExecutionContext, Future}
-import models.{Game, Login, Registration, User}
+import models.{Game, Login, Registration, User, Search}
 import models.JsonFormats._
 import play.api.libs.json._
 import reactivemongo.api.Cursor
@@ -37,7 +37,6 @@ class SearchController @Inject()(
       )
     futureGameList
   }
-
   def search(name:String): Action[AnyContent] = Action {implicit request:Request[AnyContent] =>
     Ok(views.html.searchresults(Await.result(searchByName(name), Duration.Inf)))
   }
@@ -48,5 +47,13 @@ class SearchController @Inject()(
     futureResult.map(_ => Ok(views.html.index("Game added")))
   }
 
+  def searchHandler = Action(parse.form(Search.SearchForm)) { implicit request =>
+    val search = request.body.name
+    Redirect(routes.SearchController.search(search))
+  }
+
+  def searchPage: Action[AnyContent] = Action {implicit request:Request[AnyContent] =>
+    Ok(views.html.search(Search.SearchForm,""))
+  }
 
 }
