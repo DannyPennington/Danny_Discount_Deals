@@ -10,7 +10,6 @@ import models.{Game, Login, Registration, User}
 import models.JsonFormats._
 import play.api.libs.json._
 import reactivemongo.api.Cursor
-
 import scala.concurrent.duration.Duration
 
 
