@@ -8,4 +8,6 @@ case class Game(
                genre: List[String],
                description: String,
                release: LocalDate
-               )
+               ) {
+  override def toString = s"Name: $name  Price: £$price  Description: $description"
+}
