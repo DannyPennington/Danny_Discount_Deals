@@ -32,7 +32,7 @@ class SearchController @Inject()(
         finalGames += game
       }
     }
-    finalGames.toList
+    finalGames.toList.sortWith(_.name < _.name)
   }
   def search(name:String): Action[AnyContent] = Action {implicit request:Request[AnyContent] =>
     Ok(views.html.searchresults(searchByName(name)))

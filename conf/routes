@@ -30,3 +30,5 @@ GET     /addgame                        controllers.SearchController.create
 GET     /search/:name                   controllers.SearchController.search(name:String)
 GET     /search                         controllers.SearchController.searchPage
 POST    /search                         controllers.SearchController.searchHandler
+
+GET     /about                          controllers.HomeController.about
