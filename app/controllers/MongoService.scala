@@ -1,7 +1,7 @@
 package controllers
 
 import javax.inject.Inject
-import play.api.libs.json.{Json}
+import play.api.libs.json.Json
 import play.modules.reactivemongo.{ReactiveMongoApi, ReactiveMongoComponents}
 import scala.concurrent.ExecutionContext.Implicits.global
 import reactivemongo.play.json.collection.JSONCollection
