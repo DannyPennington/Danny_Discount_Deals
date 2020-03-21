@@ -17,7 +17,7 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
 
   def home: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     if (request.session.get("user").isDefined) {
-      Ok(views.html.home("You are logged in, good work"))
+      Ok(views.html.home("Welcome to your homepage!"))
     }
     else {
       Redirect(routes.LoginController.showLoginForm()).flashing("home" -> "no")
