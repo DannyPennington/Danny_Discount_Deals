@@ -28,7 +28,7 @@ class SearchController @Inject()(
     val finalGames = ArrayBuffer.empty[Game]
     val games = Await.result(mongoService.findAllGames(),Duration.Inf)
     for (game <- games) {
-      if (game.name.contains(search)) {
+      if (game.name.toLowerCase.contains(search.toLowerCase())) {
         finalGames += game
       }
     }
