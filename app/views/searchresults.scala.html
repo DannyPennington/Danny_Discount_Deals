@@ -1,0 +1,13 @@
+@(item:List[Game])
+
+@mainloggedin("Results") {
+    @if(item.isEmpty) {
+        No results found!
+    } else{
+        @for(game <- item) {
+            Name: @game.name <br>
+            Price: £@game.price.00 <br>
+            Description: @game.description <br> <br>
+        }
+    }
+}

@@ -1,0 +1,7 @@
+@(form: Form[Search],other:String)(implicit messagesProvider: MessagesProvider)
+
+@mainloggedin("Search") {
+    @helper.form(routes.SearchController.searchHandler()) {
+        @helper.inputText(form("name"), '_label -> "Search: ", '_showConstraints -> false)
+        <button type="submit">Go!</button>}
+    }

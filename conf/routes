@@ -2,4 +2,33 @@ GET     /assets/*file                   controllers.Assets.versioned(path="/publ
 
 GET     /                               controllers.HomeController.index
 
-GET     /testdb                         controllers.JsonReadersWriters.create
+GET     /home                           controllers.HomeController.home
+
+GET     /addUser                        controllers.JsonReadersWriters.addUser(forename :String, surname :String, email :String, password :String)
+
+GET     /register                       controllers.JsonReadersWriters.showRegistration
+POST    /register                       controllers.JsonReadersWriters.registerUser
+
+GET     /login                          controllers.LoginController.showLoginForm
+POST    /login                          controllers.LoginController.loginUser
+
+GET     /logout                         controllers.LoginController.logoutUser()
+
+GET     /findByEmail/:email             controllers.JsonReadersWriters.findByEmail(email: String)
+
+GET     /account                        controllers.AccountController.showDetails
+
+GET     /account/updatepassword         controllers.AccountController.showPassword
+POST    /account/updatepassword         controllers.AccountController.updatePassword
+GET     /pwd                            controllers.AccountController.setPassword(n_password:String)
+
+GET     /account/delete                 controllers.AccountController.confirmDelete
+GET     /account/confirmdelete          controllers.AccountController.deleteUser()
+
+GET     /addgame                        controllers.SearchController.create
+
+GET     /search/:name                   controllers.SearchController.search(name:String)
+GET     /search                         controllers.SearchController.searchPage
+POST    /search                         controllers.SearchController.searchHandler
+
+GET     /about                          controllers.HomeController.about
